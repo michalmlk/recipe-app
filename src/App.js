@@ -1,10 +1,10 @@
 import React from 'react'
-import Pages from './pages/Pages'
+import Root from './pages/Root'
 
 function App() {
 	return (
 		<div className='App'>
-			<Pages />
+			<Root />
 		</div>
 	)
 }

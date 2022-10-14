@@ -5,10 +5,14 @@ import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/splide/dist/css/splide.min.css'
 
 const Wrapper = styled.div`
-	margin: 4rem 2rem;
+	padding: 2rem 12rem;
+
+	h3 {
+		padding-bottom: 2rem;
+	}
 `
 
-const CategoryWrapper = props => {
+const Category = props => {
 	const [recipes, setRecipes] = useState([])
 
 	useEffect(() => {
@@ -16,25 +20,29 @@ const CategoryWrapper = props => {
 	}, [])
 
 	const getData = async () => {
-		const apiRequest = await fetch(`${props.adress}?apiKey=${process.env.REACT_APP_API_KEY}&number=${props.numberOfRecipes}`)
+		const apiRequest = await fetch(
+			`${props.adress}?apiKey=${process.env.REACT_APP_API_KEY}&number=${props.numberOfRecipes}&${
+				props.category ? `tags=${props.category}` : ``
+			}`
+		)
 		const data = await apiRequest.json()
-		localStorage.setItem('popular', JSON.stringify(data.recipes))
 		setRecipes(data.recipes)
 	}
 
-	const spliderConfiguration = {
+	const spliderBaseConfiguration = {
 		type: 'loop',
 		perPage: '3',
 		pagination: false,
 		arrows: false,
 		drag: 'free',
 		gap: '5rem',
+		width: '100%',
 	}
 
 	return (
 		<Wrapper>
 			<h3>{props.title}</h3>
-			<Splide options={spliderConfiguration}>
+			<Splide options={{ ...spliderBaseConfiguration, ...props.spliderConfig }}>
 				{recipes.map(recipe => (
 					<SplideSlide key={recipe.id}>
 						<CategoryItem item={recipe} />
@@ -45,4 +53,4 @@ const CategoryWrapper = props => {
 	)
 }
 
-export default CategoryWrapper
+export default Category
