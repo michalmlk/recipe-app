@@ -18,8 +18,8 @@ const CategoryWrapper = props => {
 	const getData = async () => {
 		const apiRequest = await fetch(`${props.adress}?apiKey=${process.env.REACT_APP_API_KEY}&number=${props.numberOfRecipes}`)
 		const data = await apiRequest.json()
-		setRecipes([...recipes, ...data.recipes])
-		console.log(data.recipes)
+		localStorage.setItem('popular', JSON.stringify(data.recipes))
+		setRecipes(data.recipes)
 	}
 
 	const spliderConfiguration = {
@@ -36,7 +36,7 @@ const CategoryWrapper = props => {
 			<h3>{props.title}</h3>
 			<Splide options={spliderConfiguration}>
 				{recipes.map(recipe => (
-					<SplideSlide>
+					<SplideSlide key={recipe.id}>
 						<CategoryItem item={recipe} />
 					</SplideSlide>
 				))}
